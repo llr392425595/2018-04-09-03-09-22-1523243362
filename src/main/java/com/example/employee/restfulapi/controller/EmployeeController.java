@@ -40,9 +40,6 @@ public class EmployeeController {
   @GetMapping(value = "/{id}")
   public ResponseEntity<?> getEmployeeById(@PathVariable("id") Long id) throws Exception {
     Employee employee = employeeRepository.findOne(id);
-    if (employee == null) {
-      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    }
     return new ResponseEntity<>(employee, HttpStatus.OK);
   }
 
