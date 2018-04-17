@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +27,13 @@ public class EmployeeController {
   public ResponseEntity<List> getAllEmployees() {
     List<Employee> employeesList = employeeRepository.findAll();
     return new ResponseEntity<>(employeesList, HttpStatus.OK);
+  }
+
+  //  获取某个具体employee
+  @GetMapping(value = "/{id}")
+  public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") Long id) {
+    Employee employee = employeeRepository.findOne(id);
+    return new ResponseEntity<>(employee, HttpStatus.OK);
   }
 
   //  新增一个员工
@@ -49,4 +57,6 @@ public class EmployeeController {
     body.put("uri", "/api/employees/" + employee.getId());
     return new ResponseEntity<>(body, HttpStatus.CREATED);
   }
+
+
 }
