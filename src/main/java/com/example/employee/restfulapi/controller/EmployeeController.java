@@ -28,14 +28,14 @@ public class EmployeeController {
 
   //  查询所有员工
   @GetMapping(value = "")
-  public ResponseEntity<List> getAllEmployees() {
+  public ResponseEntity<List> getAllEmployees() throws Exception {
     List<Employee> employeesList = employeeRepository.findAll();
     return new ResponseEntity<>(employeesList, HttpStatus.OK);
   }
 
   //  获取某个具体employee
   @GetMapping(value = "/{id}")
-  public ResponseEntity<?> getEmployeeById(@PathVariable("id") Long id) {
+  public ResponseEntity<?> getEmployeeById(@PathVariable("id") Long id) throws Exception {
     Employee employee = employeeRepository.findOne(id);
     if (employee == null) {
       return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -50,7 +50,7 @@ public class EmployeeController {
       @RequestParam("age") Integer age,
       @RequestParam("gender") String gender,
       @RequestParam("salary") Integer salary,
-      @RequestParam("companyId") Long companyId) {
+      @RequestParam("companyId") Long companyId) throws Exception {
     Employee employee = new Employee(name, age, gender, salary, companyId);
     employee = employeeRepository.save(employee);
 
@@ -61,7 +61,7 @@ public class EmployeeController {
 
   //  删除某个employee
   @DeleteMapping(value = "/{id}")
-  public ResponseEntity<?> deleteEmployee(@PathVariable("id") Long id) {
+  public ResponseEntity<?> deleteEmployee(@PathVariable("id") Long id) throws Exception {
     if (employeeRepository.exists(id)) {
       employeeRepository.delete(id);
       return new ResponseEntity<>(employeeRepository.findOne(id), HttpStatus.NO_CONTENT);
@@ -81,6 +81,13 @@ public class EmployeeController {
     employee.setCompanyId(newEmployee.getCompanyId());
     employeeRepository.save(employee);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
+
+  //  筛选出所有男性Employee
+  @GetMapping(value = "/male")
+  public ResponseEntity getEmployeeByGender() throws Exception {
+    List<Employee> employeeList = employeeRepository.findByGender("male");
+    return new ResponseEntity<>(employeeList, HttpStatus.OK);
   }
 
 
