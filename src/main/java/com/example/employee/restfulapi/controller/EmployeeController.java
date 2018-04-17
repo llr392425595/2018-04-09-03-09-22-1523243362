@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -90,6 +93,12 @@ public class EmployeeController {
     return new ResponseEntity<>(employeeList, HttpStatus.OK);
   }
 
-
+  //  分页查询，page等于1，pageSize等于5
+  @GetMapping(value = "/page/{page}/pageSize/{pageSize}")
+  public ResponseEntity getEmployeePage(@PathVariable int page, @PathVariable int pageSize) throws Exception {
+    Pageable pageable = new PageRequest(page-1, pageSize);
+    Page employees = employeeRepository.findAll(pageable);
+    return new ResponseEntity<>(employees, HttpStatus.OK);
+  }
 
 }
